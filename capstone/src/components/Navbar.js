@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import logout from '../helpers/auth'
 
 export default class Navbar extends Component {
   render () {
@@ -10,14 +9,16 @@ export default class Navbar extends Component {
             DePaul Degree Planner
           </div>
         </div>
-        {
-          this.props.signedIn &&
-          <div class="navbar-end">
-            <div class="navbar-item">
-              <a class="button is-link is-inverted" onClick={logout}>Logout</a>
-            </div>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            {
+              this.props.user ?
+              <button class="button is-link is-inverted" onClick={this.props.logout}>Log Out</button>
+              :
+              <button class="button is-link is-inverted" onClick={this.props.login}>Log In</button>
+            }
           </div>
-        }
+        </div>
       </nav>
     );
   }

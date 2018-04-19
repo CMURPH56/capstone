@@ -12,18 +12,9 @@ const config = {
   messagingSenderId: '195588949678'
 };
 
-export const uiConfig = {
-  signInFlow: 'popup',
-  signInOptions: [
-    firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID
-  ],
-  callbacks: {
-    signInSuccess: () => false
-  }
-};
-
 firebase.initializeApp(config);
 
-export const firebaseAuth = firebase.auth();
+export const provider = new firebase.auth.GoogleAuthProvider();
+export const auth = firebase.auth();
 export const db = firebase.firestore();
+export default firebase;
