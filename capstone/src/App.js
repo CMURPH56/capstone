@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
+import Profile from './components/Profile';
 import { auth, provider, db } from './config/firebase';
 
 class App extends Component {
@@ -9,8 +10,6 @@ class App extends Component {
     this.state = {
       user: null
     }
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
   }
 
   componentDidMount() {
@@ -21,7 +20,7 @@ class App extends Component {
     });
   }
 
-  logout() {
+  logout = () => {
     auth.signOut()
     .then(() => {
       this.setState({
@@ -29,7 +28,7 @@ class App extends Component {
       });
     });
   }
-  login() {
+  login = () => {
     auth.signInWithPopup(provider)
       .then((result) => {
         const user = result.user;
@@ -64,17 +63,7 @@ class App extends Component {
         <Navbar user={this.state.user} login={() => this.login()} logout={() => this.logout()}/>
         {
           this.state.user ?
-          <div>
-          <section class="hero">
-            <div class="hero-body">
-              <div class="container">
-                <h1 class="title has-text-centered">
-                  {this.state.user.displayName}&#39;s Dashboard
-                </h1>
-              </div>
-            </div>
-          </section>
-          </div>
+          <Profile user={this.state.user}/>
           :
           <section class="hero">
             <div class="hero-body">
