@@ -1,33 +1,49 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { db } from '../config/firebase';
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router';
+import Navbar from './Navbar';
 
 export default class Profile extends Component {
   constructor() {
     super();
     this.state = {
+      name: "",
       degree: "Computer Science",
-      concentration: "",
+      concentration: "Software and Systems Development",
       numCourses: 1,
       updating: false
     }
   }
 
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  }
+
   componentDidMount() {
-    this.getProfile();
+    if (this.context.store.getState().user) {
+      this.getProfile();
+    }
   }
 
   getProfile = () => {
-    var docRef = db.collection("users").doc(this.props.user.uid);
+    var docRef = db.collection("users").doc(this.context.store.getState().user.uid);
     docRef.get().then((doc) => {
     if (doc.exists) {
         console.log("Getting user profile!");
         // Only update state if they already have previously stored data
-        if (doc.data()['degree']) {
+        if (doc.data()['name'] && doc.data()['degree']){
           this.setState({
+            name: doc.data()['name'],
             degree: doc.data()['degree'],
             concentration: doc.data()['concentration'],
             numCourses: doc.data()['numCourses']
           });
+        }
+        else {
+          this.setState({
+            name: doc.data()['name']
+          })
         }
         console.log(this.state)
     } else {
@@ -50,17 +66,22 @@ export default class Profile extends Component {
     this.setState({numCourses: e.target.value});
   }
 
+  nameChanged = (e) => {
+    this.setState({name: e.target.value});
+  }
+
   closeNotification = () => {
     this.setState({updating: false});
   }
 
   updateProfile = () => {
-    var docRef = db.collection("users").doc(this.props.user.uid);
+    var docRef = db.collection("users").doc(this.context.store.getState().user.uid);
     docRef.get().then((doc) => {
     if (doc.exists) {
         console.log("Updating user!");
-        db.collection('users').doc(this.props.user.uid)
+        db.collection('users').doc(this.context.store.getState().user.uid)
           .set({
+            name: this.state.name,
             degree: this.state.degree,
             concentration: this.state.concentration,
             numCourses: this.state.numCourses
@@ -77,136 +98,133 @@ export default class Profile extends Component {
    });
   }
   render () {
-    return (
-      <div>
-        {
-          this.state.updating ?
-          <div class="notification is-success">
-            <button class="delete" onClick={this.closeNotification}></button>
-            <div class="container">
-              <h1 class="title has-text-centered">Update Successful!</h1>
+    if (this.context.store.getState().user){
+      return (
+        <div>
+          <Navbar store={this.context.store}/>
+          {
+            this.state.updating ?
+            <div className="notification is-success">
+              <button className="delete" onClick={this.closeNotification}></button>
+              <div className="container">
+                <h1 className="title has-text-centered">Update Successful!</h1>
+              </div>
             </div>
-          </div>
-          :
-          <div></div>
-        }
-        <section class="section">
-          <div class="container">
-            <h1 class="title has-text-left">
-              Profile
-            </h1>
-          </div>
-        </section>
-        <section class="section">
-          <div class="columns">
-            <div class="column">
-              <div class="container is-fluid">
-                <div class="field is-horizontal">
-                  <div class="field-label">
-                    <label class="label is-medium">Name</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="control">
-                      <input class="input is-medium is-info is-rounded" type="text" value={this.props.user.displayName} disabled/>
+            :
+            <div></div>
+          }
+          <section className="section">
+            <div className="container">
+              <h1 className="title has-text-left">
+                Profile
+              </h1>
+            </div>
+          </section>
+          <section className="section">
+            <div className="columns">
+              <div className="column">
+                <div className="container is-fluid">
+                  <div className="field is-horizontal">
+                    <div className="field-label">
+                      <label className="label is-medium">Name</label>
                     </div>
-                  </div>
-                </div>
-                <div class="field is-horizontal">
-                  <div class="field-label">
-                    <label class="label is-medium">Email</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="control">
-                      <input class="input is-medium is-info is-rounded" type="text" value={this.props.user.email} disabled/>
-                    </div>
-                  </div>
-                </div>
-                <div class="field is-horizontal">
-                  <div class="field-label">
-                    <label class="label is-medium">Degree</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="control">
-                      <div class="select is-medium is-info is-rounded">
-                        <select value={this.state.degree} onChange={this.degreeChanged}>
-                          <option value="Computer Science">Computer Science</option>
-                          <option value="Information Systems">Information Systems</option>
-                        </select>
+                    <div className="field-body">
+                      <div className="control">
+                        <input className="input is-medium is-info is-rounded" type="text" value={this.state.name} onChange={this.nameChanged}/>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="field is-horizontal">
-                  <div class="field-label">
-                    <label class="label is-medium">Concentration</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="control">
-                      <div class="select is-medium is-info is-rounded">
-                      {
-                        this.state.degree === "Computer Science" ?
-                        <select value={this.state.concentration} onChange={this.concentrationChanged}>
-                          <option value="Software and Systems Development">Software and Systems Development</option>
-                          <option value="Theory">Theory</option>
-                          <option value="Data Science">Data Science</option>
-                          <option value="Database Systems">Database Systems</option>
-                          <option value="Artificial Intelligence">Artificial Intelligence</option>
-                          <option value="Software Engineering">Software Engineering</option>
-                          <option value="Game and Real-Time Systems">Game and Real-Time Systems</option>
-                          <option value="Human-Computer Interaction">Human-Computer Interaction</option>
-                        </select>
-                        :
-                        <select value={this.state.concentration} onChange={this.concentrationChanged}>
-                          <option value="Business Analysis/Systems Analysis">Business Analysis/Systems Analysis</option>
-                          <option value="Business Intelligence">Business Intelligence</option>
-                          <option value="Database Administration">Database Administration</option>
-                          <option value="IT Enterprise Management">IT Enterprise Management</option>
-                          <option value="Standard">Standard</option>
-                        </select>
-                      }
+                  <div className="field is-horizontal">
+                    <div className="field-label">
+                      <label className="label is-medium">Email</label>
+                    </div>
+                    <div className="field-body">
+                      <div className="control">
+                        <input className="input is-medium is-info is-rounded" type="text" value={this.context.store.getState().user.email} disabled/>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="field is-horizontal">
-                  <div class="field-label">
-                    <label class="label is-medium"># Courses per Quarter</label>
-                  </div>
-                  <div class="field-body">
-                    <div class="control">
-                      <div class="select is-medium is-info is-rounded">
-                        <select value={this.state.numCourses} onChange={this.numCoursesChanged}>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                        </select>
+                  <div className="field is-horizontal">
+                    <div className="field-label">
+                      <label className="label is-medium">Degree</label>
+                    </div>
+                    <div className="field-body">
+                      <div className="control">
+                        <div className="select is-medium is-info is-rounded">
+                          <select value={this.state.degree} onChange={this.degreeChanged}>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Information Systems">Information Systems</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="field is-horizontal">
-                  <div class="field-label">
-                    <label class="label is-medium"></label>
+                  <div className="field is-horizontal">
+                    <div className="field-label">
+                      <label className="label is-medium">Concentration</label>
+                    </div>
+                    <div className="field-body">
+                      <div className="control">
+                        <div className="select is-medium is-info is-rounded">
+                        {
+                          this.state.degree !== "Information Systems" ?
+                          <select value={this.state.concentration} onChange={this.concentrationChanged}>
+                            <option value="Software and Systems Development">Software and Systems Development</option>
+                            <option value="Theory">Theory</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Database Systems">Database Systems</option>
+                            <option value="Artificial Intelligence">Artificial Intelligence</option>
+                            <option value="Software Engineering">Software Engineering</option>
+                            <option value="Game and Real-Time Systems">Game and Real-Time Systems</option>
+                            <option value="Human-Computer Interaction">Human-Computer Interaction</option>
+                          </select>
+                          :
+                          <select value={this.state.concentration} onChange={this.concentrationChanged}>
+                            <option value="Business Analysis/Systems Analysis">Business Analysis/Systems Analysis</option>
+                            <option value="Business Intelligence">Business Intelligence</option>
+                            <option value="Database Administration">Database Administration</option>
+                            <option value="IT Enterprise Management">IT Enterprise Management</option>
+                            <option value="Standard">Standard</option>
+                          </select>
+                        }
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="field-body">
-                    <div class="control">
-                      <button class="button is-link" onClick={this.updateProfile}>Update</button>
+                  <div className="field is-horizontal">
+                    <div className="field-label">
+                      <label className="label is-medium"># Courses per Quarter</label>
+                    </div>
+                    <div className="field-body">
+                      <div className="control">
+                        <div className="select is-medium is-info is-rounded">
+                          <select value={this.state.numCourses} onChange={this.numCoursesChanged}>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="field is-horizontal">
+                    <div className="field-label">
+                      <label className="label is-medium"></label>
+                    </div>
+                    <div className="field-body">
+                      <div className="control">
+                        <button className="button is-link is-rounded" onClick={this.updateProfile}>Update</button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="column">
-              <div class="container is-fluid">
-                <figure class="image is-128x128">
-                  <img src={this.props.user.photoURL} alt="Profile"/>
-                </figure>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    );
+          </section>
+        </div>
+      );
+    }
+    return <Redirect to="/login"/>
   }
 }

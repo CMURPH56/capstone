@@ -1,33 +1,25 @@
-import { db, firebaseAuth } from '../config/firebase'
+import { auth } from '../config/firebase'
 
 export function createUser (email, pw) {
-  return firebaseAuth.createUserWithEmailAndPassword(email, pw)
-    .then(addUser())
+  return auth.createUserWithEmailAndPassword(email, pw)
+    .catch((error) => {
+      console.log("Error creating user:", error);
+    });
 }
 
-export function logout () {
-  return firebaseAuth.signOut()
+export const logout = async() => {
+  console.log("Logging out...")
+  await auth.signOut()
+  console.log("Logged out successfully")
 }
 
 export function login (email, pw) {
-  return firebaseAuth.signInWithEmailAndPassword(email, pw)
+  return auth.signInWithEmailAndPassword(email, pw)
+    .catch((error) => {
+      console.log("Error logging in:", error);
+    });
 }
 
 export function resetPassword (email) {
-  return firebaseAuth.sendPasswordResetEmail(email)
-}
-
-
-export function addUser (user) {
-  return db.collection('users')
-    .add({
-      id: user.uid,
-      email: user.email
-    })
-    .then(function(docRef) {
-      console.log("Document written with ID: ", docRef.id);
-    })
-    .catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
+  return auth.sendPasswordResetEmail(email)
 }
