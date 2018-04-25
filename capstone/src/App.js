@@ -8,12 +8,24 @@ import { loginUser } from './actions';
 import Navbar from './components/Navbar';
 
 class App extends Component {
+  state = { registerError: null }
 
   static contextTypes = {
     store: PropTypes.object.isRequired,
     router: PropTypes.shape({
       history: PropTypes.object.isRequired,
     })
+  }
+
+  setErrorMsg(error) {
+    return {
+      registerError: error.message
+    }
+  }
+
+  handleLogin() {
+    login(this.email.value, this.password.value)
+      .catch((error) => this.setState(this.setErrorMsg(error)))
   }
 
   componentDidMount() {
@@ -81,9 +93,13 @@ class App extends Component {
                         </span>
                       </div>
                     </div>
+                    {
+                      this.state.registerError &&
+                      <p className="help is-danger">Error: {this.state.registerError}</p>
+                    }
                     <div className="field is-grouped">
                       <div className="control">
-                        <button className="button is-success is-rounded" onClick={() => login(this.email.value, this.password.value)}>
+                        <button className="button is-success is-rounded" onClick={() => this.handleLogin()}>
                           Login
                         </button>
                       </div>

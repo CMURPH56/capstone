@@ -75,11 +75,12 @@ export default class Profile extends Component {
   }
 
   updateProfile = () => {
-    var docRef = db.collection("users").doc(this.context.store.getState().user.uid);
+    const user = this.context.store.getState().user
+    var docRef = db.collection("users").doc(user.uid);
     docRef.get().then((doc) => {
     if (doc.exists) {
         console.log("Updating user!");
-        db.collection('users').doc(this.context.store.getState().user.uid)
+        db.collection('users').doc(user.uid)
           .set({
             name: this.state.name,
             degree: this.state.degree,
@@ -88,6 +89,13 @@ export default class Profile extends Component {
           }, { merge: true })
           .catch((error) => {
             console.error("Error adding document: ", error);
+          });
+        user.updateProfile({
+            displayName: this.state.name
+          }).then(() => {
+            console.log("Updated Firebase User Profile Name: ", user.displayName)
+          }).catch((error) => {
+            console.error("Error updating profile: ", error);
           });
         this.setState({updating: true});
     } else {

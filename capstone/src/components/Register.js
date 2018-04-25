@@ -6,18 +6,14 @@ import Navbar from './Navbar';
 import { auth, db } from '../config/firebase';
 import { loginUser } from '../actions';
 
-function setErrorMsg(error) {
-  return {
-    registerError: error.message
-  }
-}
+
 
 export default class Register extends Component {
   state = { registerError: null }
   handleSubmit = (e) => {
     e.preventDefault()
     createUser(this.email.value, this.password.value)
-    .catch(e => this.setState(setErrorMsg(e)))
+      .catch((error) => this.setState(this.setErrorMsg(error)))
   }
 
   static contextTypes = {
@@ -26,6 +22,13 @@ export default class Register extends Component {
       history: PropTypes.object.isRequired,
     })
   }
+
+  setErrorMsg(error) {
+    return {
+      registerError: error.message
+    }
+  }
+
   componentDidMount() {
     this.unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
