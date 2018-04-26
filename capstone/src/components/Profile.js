@@ -12,7 +12,8 @@ export default class Profile extends Component {
       degree: "Computer Science",
       concentration: "Software and Systems Development",
       numCourses: 1,
-      updating: false
+      updating: false,
+      updateLoading: ""
     }
   }
 
@@ -75,6 +76,7 @@ export default class Profile extends Component {
   }
 
   updateProfile = () => {
+    this.setState({updateLoading: "is-loading"})
     const user = this.context.store.getState().user
     var docRef = db.collection("users").doc(user.uid);
     docRef.get().then((doc) => {
@@ -97,7 +99,7 @@ export default class Profile extends Component {
           }).catch((error) => {
             console.error("Error updating profile: ", error);
           });
-        this.setState({updating: true});
+        this.setState({updating: true, updateLoading: ""});
     } else {
         console.log("User doesn't exist!")
     }
@@ -222,7 +224,7 @@ export default class Profile extends Component {
                     </div>
                     <div className="field-body">
                       <div className="control">
-                        <button className="button is-link is-rounded" onClick={this.updateProfile}>Update</button>
+                        <button className={"button is-link is-rounded " + this.state.updateLoading} onClick={this.updateProfile}>Update</button>
                       </div>
                     </div>
                   </div>
