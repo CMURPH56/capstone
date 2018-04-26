@@ -8,7 +8,12 @@ import { loginUser } from './actions';
 import Navbar from './components/Navbar';
 
 class App extends Component {
-  state = { registerError: null }
+  state = {
+    registerError: null,
+    emailClass: "is-info",
+    passwordClass: "is-info",
+    loginLoading: ""
+  }
 
   static contextTypes = {
     store: PropTypes.object.isRequired,
@@ -17,15 +22,42 @@ class App extends Component {
     })
   }
 
-  setErrorMsg(error) {
-    return {
-      registerError: error.message
+  handleErrorMsg(error) {
+    switch(error.message) {
+      case "The email address is badly formatted.":
+        return {
+          emailClass: "is-danger",
+          passwordClass: "is-info",
+          registerError: error.message
+        }
+      case "There is no user record corresponding to this identifier. The user may have been deleted.":
+        return {
+          emailClass: "is-danger",
+          passwordClass: "is-info",
+          registerError: "No User found"
+        }
+      case "The password is invalid or the user does not have a password.":
+        return {
+          passwordClass: "is-danger",
+          emailClass: "is-info",
+          registerError: "Invalid Password"
+        }
+      default:
+        return {
+          passwordClass: "is-info",
+          emailClass: "is-info",
+          registerError: error.message
+        }
     }
   }
 
   handleLogin() {
+    this.setState({loginLoading: "is-loading"})
     login(this.email.value, this.password.value)
-      .catch((error) => this.setState(this.setErrorMsg(error)))
+      .catch((error) => {
+        this.setState({loginLoading: ""})
+        this.setState(this.handleErrorMsg(error))
+      })
   }
 
   componentDidMount() {
@@ -78,19 +110,31 @@ class App extends Component {
                 <div className="column">
                   <div className="container is-fluid">
                     <div className="field">
-                      <div className="control has-icons-left">
-                        <input ref={(e) => this.email = e} className="input is-medium is-info is-rounded" type="email" placeholder="Email"/>
+                      <div className="control has-icons-left has-icons-right">
+                        <input ref={(e) => this.email = e} className={"input is-medium is-rounded " + this.state.emailClass} type="email" placeholder="Email"/>
                         <span className="icon is-medium is-left">
                           <i className="fa fa-envelope"></i>
                         </span>
+                        {
+                          this.state.emailClass === "is-danger" &&
+                          <span className="icon is-medium is-right">
+                            <i className="fa fa-exclamation-triangle"></i>
+                          </span>
+                        }
                       </div>
                     </div>
                     <div className="field">
-                      <div className="control has-icons-left">
-                        <input ref={(p) => this.password = p} className="input is-medium is-info is-rounded" type="password" placeholder="Password"/>
+                      <div className="control has-icons-left has-icons-right">
+                        <input ref={(p) => this.password = p} className={"input is-medium is-rounded " + this.state.passwordClass} type="password" placeholder="Password"/>
                         <span className="icon is-medium is-left">
                           <i className="fa fa-lock"></i>
                         </span>
+                        {
+                          this.state.passwordClass === "is-danger" &&
+                          <span className="icon is-medium is-right">
+                            <i className="fa fa-exclamation-triangle"></i>
+                          </span>
+                        }
                       </div>
                     </div>
                     {
@@ -99,7 +143,7 @@ class App extends Component {
                     }
                     <div className="field is-grouped">
                       <div className="control">
-                        <button className="button is-success is-rounded" onClick={() => this.handleLogin()}>
+                        <button className={"button is-success is-rounded " + this.state.loginLoading} onClick={() => this.handleLogin()}>
                           Login
                         </button>
                       </div>
