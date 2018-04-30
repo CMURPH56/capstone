@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import './App.css';
 import PropTypes from 'prop-types';
-import { auth, db } from './config/firebase';
-import { login } from './helpers/auth'
+import { auth, db } from '../config/firebase';
+import { login } from '../helpers/auth'
 import { Link } from 'react-router-dom';
-import { loginUser } from './actions';
-import Navbar from './components/Navbar';
+import { loginUser } from '../actions';
+import Navbar from './Navbar';
 
-class App extends Component {
+export default class Login extends Component {
   state = {
     registerError: null,
     emailClass: "is-info",
@@ -165,5 +164,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;

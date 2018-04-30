@@ -111,7 +111,7 @@ export default class Profile extends Component {
     if (this.context.store.getState().user){
       return (
         <div>
-          <Navbar store={this.context.store}/>
+          <Navbar store={this.context.store} active="Profile"/>
           {
             this.state.updating ?
             <div className="notification is-success">
