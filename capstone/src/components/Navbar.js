@@ -11,6 +11,8 @@ export default class Navbar extends Component {
     searchIsActive: "",
     requirementsIsActive: "",
     profileIsActive: "",
+    loginIsActive: "",
+    registerIsActive: ""
   }
   static contextTypes = {
     router: PropTypes.shape({
@@ -37,6 +39,8 @@ export default class Navbar extends Component {
           searchIsActive: "",
           requirementsIsActive: "",
           profileIsActive: "is-inverted",
+          loginIsActive: "",
+          registerIsActive: ""
         })
         break
       case "DegreePlanner":
@@ -45,6 +49,8 @@ export default class Navbar extends Component {
           searchIsActive: "",
           requirementsIsActive: "",
           profileIsActive: "",
+          loginIsActive: "",
+          registerIsActive: ""
         })
         break
       case "ClassSearch":
@@ -53,6 +59,8 @@ export default class Navbar extends Component {
           searchIsActive: "is-inverted",
           requirementsIsActive: "",
           profileIsActive: "",
+          loginIsActive: "",
+          registerIsActive: ""
         })
         break
       case "DegreeRequirements":
@@ -61,6 +69,28 @@ export default class Navbar extends Component {
           searchIsActive: "",
           requirementsIsActive: "is-inverted",
           profileIsActive: "",
+          loginIsActive: "",
+          registerIsActive: ""
+        })
+        break
+      case "Login":
+        this.setState({
+          plannerIsActive: "",
+          searchIsActive: "",
+          requirementsIsActive: "",
+          profileIsActive: "",
+          loginIsActive: "is-inverted",
+          registerIsActive: ""
+        })
+        break
+      case "Register":
+        this.setState({
+          plannerIsActive: "",
+          searchIsActive: "",
+          requirementsIsActive: "",
+          profileIsActive: "",
+          loginIsActive: "",
+          registerIsActive: "is-inverted"
         })
         break
       default:
@@ -136,6 +166,24 @@ export default class Navbar extends Component {
                   <img src={logo} alt="DePaul University" />
                 </button>
               </Link>
+            </div>
+          </div>
+          <div className="navbar-menu">
+            <div className="navbar-start">
+              <div className="navbar-item">
+                <Link to="/login">
+                  <button className={"button is-link " + this.state.loginIsActive}>
+                    Login
+                  </button>
+                </Link>
+              </div>
+              <div className="navbar-item">
+                <Link to="/register">
+                  <button className={"button is-link " + this.state.registerIsActive}>
+                    Register
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </nav>

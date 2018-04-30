@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { createUser } from '../helpers/auth'
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import { auth, db } from '../config/firebase';
@@ -102,7 +101,7 @@ export default class Register extends Component {
   render () {
     return (
       <div>
-      <Navbar store={this.context.store}/>
+      <Navbar store={this.context.store} active="Register"/>
       <div>
         <section className="hero">
           <div className="hero-body">
@@ -161,14 +160,8 @@ export default class Register extends Component {
                 this.state.registerError &&
                 <p className="help is-danger">Error: {this.state.registerError}</p>
               }
-
-              <div className="field is-grouped">
-                <div className="control">
-                  <button type="submit" className={"button is-link is-rounded " + this.state.registerLoading}>Register</button>
-                </div>
-                <div className="control">
-                  <Link to="/login"><button className="button is-text">Sign In</button></Link>
-                </div>
+              <div className="control">
+                <button type="submit" className={"button is-link is-rounded " + this.state.registerLoading}>Register</button>
               </div>
             </form>
           </div>
