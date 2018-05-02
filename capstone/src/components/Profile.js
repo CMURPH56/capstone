@@ -139,7 +139,7 @@ export default class Profile extends Component {
                       </div>
                       <div className="field-body">
                         <div className="control">
-                          <input className="input is-medium is-info is-rounded" type="text" value={this.state.name} onChange={this.nameChanged}/>
+                          <input className="input is-medium is-link is-rounded" type="text" value={this.state.name} onChange={this.nameChanged}/>
                         </div>
                       </div>
                     </div>
@@ -149,7 +149,7 @@ export default class Profile extends Component {
                       </div>
                       <div className="field-body">
                         <div className="control">
-                          <input className="input is-medium is-info is-rounded" type="text" value={this.context.store.getState().user.email} disabled/>
+                          <input className="input is-medium is-link is-rounded" type="text" value={this.context.store.getState().user.email} disabled/>
                         </div>
                       </div>
                     </div>
@@ -159,7 +159,7 @@ export default class Profile extends Component {
                       </div>
                       <div className="field-body">
                         <div className="control">
-                          <div className="select is-medium is-info is-rounded">
+                          <div className="select is-medium is-link is-rounded">
                             <select value={this.state.degree} onChange={this.degreeChanged}>
                               <option value="Computer Science">Computer Science</option>
                               <option value="Information Systems">Information Systems</option>
@@ -174,7 +174,7 @@ export default class Profile extends Component {
                       </div>
                       <div className="field-body">
                         <div className="control">
-                          <div className="select is-medium is-info is-rounded">
+                          <div className="select is-medium is-link is-rounded">
                           {
                             this.state.degree !== "Information Systems" ?
                             <select value={this.state.concentration} onChange={this.concentrationChanged}>
@@ -206,7 +206,7 @@ export default class Profile extends Component {
                       </div>
                       <div className="field-body">
                         <div className="control">
-                          <div className="select is-medium is-info is-rounded">
+                          <div className="select is-medium is-link is-rounded">
                             <select value={this.state.numCourses} onChange={this.numCoursesChanged}>
                               <option value="1">1</option>
                               <option value="2">2</option>
@@ -223,7 +223,7 @@ export default class Profile extends Component {
                       </div>
                       <div className="field-body">
                         <div className="control">
-                          <button className={"button is-info is-rounded " + this.state.updateLoading} onClick={this.updateProfile}>Update</button>
+                          <button className={"button is-link is-rounded " + this.state.updateLoading} onClick={this.updateProfile}>Update</button>
                         </div>
                       </div>
                     </div>
