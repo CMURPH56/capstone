@@ -15,5 +15,5 @@ npm start
 npm run-script build
 
 # Deploy to firebase
-firebase deploy
+firebase deploy --only hosting
 ```
