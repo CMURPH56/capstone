@@ -12,11 +12,17 @@ export default class Register extends Component {
     registerError: null,
     emailClass: "is-info",
     passwordClass: "is-info",
+    nameClass: "is-info",
     registerLoading: ""
   }
   handleSubmit = (e) => {
-    this.setState({registerLoading: "is-loading"})
     e.preventDefault()
+    if (this.name.value.length === 0) {
+      const error = {message: "Please enter a Name."}
+      this.setState(this.handleErrorMsg(error))
+      return
+    }
+    this.setState({registerLoading: "is-loading"})
     createUser(this.email.value, this.password.value)
       .catch((error) => {
         this.setState({registerLoading: ""})
@@ -37,24 +43,35 @@ export default class Register extends Component {
         return {
           emailClass: "is-danger",
           passwordClass: "is-info",
+          nameClass: "is-info",
           registerError: error.message
         }
       case "The email address is already in use by another account.":
         return {
           emailClass: "is-danger",
           passwordClass: "is-info",
+          nameClass: "is-info",
           registerError: error.message
         }
       case "Password should be at least 6 characters":
         return {
           passwordClass: "is-danger",
           emailClass: "is-info",
+          nameClass: "is-info",
+          registerError: error.message
+        }
+      case "Please enter a Name.":
+        return {
+          nameClass: "is-danger",
+          emailClass: "is-info",
+          passwordClass: "is-info",
           registerError: error.message
         }
       default:
         return {
           passwordClass: "is-info",
           emailClass: "is-info",
+          nameClass: "is-info",
           registerError: error.message
         }
     }
@@ -119,8 +136,14 @@ export default class Register extends Component {
             <form onSubmit={this.handleSubmit}>
               <div className="field">
                 <label className="label">Name</label>
-                <div className="control">
-                  <input ref={(name) => this.name = name} className="input is-info is-rounded" type="text" placeholder="Name" />
+                <div className="control has-icons-right">
+                  <input ref={(name) => this.name = name} className={"input is-rounded " + this.state.nameClass} type="text" placeholder="Name" />
+                  {
+                    this.state.nameClass === "is-danger" &&
+                    <span className="icon is-medium is-right">
+                      <i className="fa fa-exclamation-triangle"></i>
+                    </span>
+                  }
                 </div>
               </div>
 
