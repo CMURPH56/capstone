@@ -14,6 +14,14 @@ export default class ClassSearch extends Component {
       return(
         <div>
           <Navbar store={this.context.store} active="ClassSearch"/>
+          <section className="section">
+            <div className="container">
+              <h1 className="title has-text-left">
+                Class Search
+              </h1>
+            </div>
+            <div className="is-divider" />
+          </section>
         </div>
       )
     }

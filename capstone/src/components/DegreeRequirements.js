@@ -14,6 +14,14 @@ export default class DegreeRequirements extends Component {
       return(
         <div>
           <Navbar store={this.context.store} active="DegreeRequirements"/>
+          <section className="section">
+            <div className="container">
+              <h1 className="title has-text-left">
+                Degree Requirements
+              </h1>
+            </div>
+            <div className="is-divider" />
+          </section>
         </div>
       )
     }
