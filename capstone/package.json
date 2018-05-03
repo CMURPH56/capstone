@@ -5,6 +5,8 @@
   "dependencies": {
     "ajv": "^6.4.0",
     "bulma": "^0.6.2",
+    "bulma-divider": "^1.0.1",
+    "bulma-pageloader": "^1.0.1",
     "firebase": "^4.12.1",
     "font-awesome": "^4.7.0",
     "node-sass-chokidar": "^1.2.2",

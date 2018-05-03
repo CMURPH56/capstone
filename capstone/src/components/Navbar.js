@@ -12,7 +12,8 @@ export default class Navbar extends Component {
     requirementsIsActive: "",
     profileIsActive: "",
     loginIsActive: "",
-    registerIsActive: ""
+    registerIsActive: "",
+    burgerIsActive: ""
   }
   static contextTypes = {
     router: PropTypes.shape({
@@ -38,14 +39,14 @@ export default class Navbar extends Component {
           plannerIsActive: "",
           searchIsActive: "",
           requirementsIsActive: "",
-          profileIsActive: "is-inverted",
+          profileIsActive: "is-active",
           loginIsActive: "",
           registerIsActive: ""
         })
         break
       case "DegreePlanner":
         this.setState({
-          plannerIsActive: "is-inverted",
+          plannerIsActive: "is-active",
           searchIsActive: "",
           requirementsIsActive: "",
           profileIsActive: "",
@@ -56,7 +57,7 @@ export default class Navbar extends Component {
       case "ClassSearch":
         this.setState({
           plannerIsActive: "",
-          searchIsActive: "is-inverted",
+          searchIsActive: "is-active",
           requirementsIsActive: "",
           profileIsActive: "",
           loginIsActive: "",
@@ -67,7 +68,7 @@ export default class Navbar extends Component {
         this.setState({
           plannerIsActive: "",
           searchIsActive: "",
-          requirementsIsActive: "is-inverted",
+          requirementsIsActive: "is-active",
           profileIsActive: "",
           loginIsActive: "",
           registerIsActive: ""
@@ -79,7 +80,7 @@ export default class Navbar extends Component {
           searchIsActive: "",
           requirementsIsActive: "",
           profileIsActive: "",
-          loginIsActive: "is-inverted",
+          loginIsActive: "is-active",
           registerIsActive: ""
         })
         break
@@ -90,7 +91,7 @@ export default class Navbar extends Component {
           requirementsIsActive: "",
           profileIsActive: "",
           loginIsActive: "",
-          registerIsActive: "is-inverted"
+          registerIsActive: "is-active"
         })
         break
       default:
@@ -99,7 +100,18 @@ export default class Navbar extends Component {
           searchIsActive: "",
           requirementsIsActive: "",
           profileIsActive: "",
+          loginIsActive: "",
+          registerIsActive: ""
         })
+    }
+  }
+
+  handleBurger() {
+    if (this.state.burgerIsActive === "") {
+      this.setState({burgerIsActive: "is-active"})
+    }
+    else {
+      this.setState({burgerIsActive: ""})
     }
   }
 
@@ -115,8 +127,13 @@ export default class Navbar extends Component {
                 </button>
               </Link>
             </div>
+            <div className={"navbar-burger " + this.state.burgerIsActive} onClick={() => this.handleBurger()}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-          <div className="navbar-menu">
+          <div className={"navbar-menu " + this.state.burgerIsActive}>
             <div className="navbar-start">
               <div className="navbar-item">
                 <Link to="/degree_planner">
@@ -149,7 +166,7 @@ export default class Navbar extends Component {
             </div>
             <div className="navbar-end">
               <div className="navbar-item">
-                <button className="button is-link" onClick={this.handleLogout}>Log Out</button>
+                <button className="button is-link is-inverted" onClick={this.handleLogout}>Log Out</button>
               </div>
             </div>
           </div>
@@ -167,8 +184,13 @@ export default class Navbar extends Component {
                 </button>
               </Link>
             </div>
+            <div className={"navbar-burger " + this.state.burgerIsActive} onClick={() => this.handleBurger()}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-          <div className="navbar-menu">
+          <div className={"navbar-menu " + this.state.burgerIsActive}>
             <div className="navbar-start">
               <div className="navbar-item">
                 <Link to="/login">

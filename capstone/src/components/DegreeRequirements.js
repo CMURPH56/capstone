@@ -38,6 +38,7 @@ export default class DegreeRequirements extends Component {
                 Degree Requirements
               </h1>
             </div>
+<<<<<<< HEAD
           </section>
         <section className="section">
           <div className="columns">
@@ -98,6 +99,12 @@ export default class DegreeRequirements extends Component {
 
 
       );
+=======
+            <div className="is-divider" />
+          </section>
+        </div>
+      )
+>>>>>>> 1e4497e9e85c23d54a7dd9f3543780fb43ee3638
     }
     return <Redirect to="/login"/>
   }
