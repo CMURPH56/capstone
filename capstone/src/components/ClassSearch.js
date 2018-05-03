@@ -40,9 +40,7 @@ export default class ClassSearch extends Component {
                 Class Search
               </h1>
             </div>
-            <div className="is-divider" />
-          </section>
-          <section className="section">
+          <div className="is-divider" />
             <div className="columns">
                <div className="column">
                  <div className="container is-fluid">
