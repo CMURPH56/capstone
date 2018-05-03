@@ -74,7 +74,7 @@ export default class ClassSearch extends Component {
                     </div>
                     <div className="field is-horizontal">
                      <div className="field-label">
-                      <label className="label is-medium">Course Name</label>
+                      <label className="label is-medium">Course Number</label>
                       </div>
                      <div className="field-body">
                       <div className="control">
