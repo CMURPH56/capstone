@@ -9,6 +9,7 @@ export default class DegreeRequirements extends Component {
     this.state = {
       degree: "Computer Science",
       concentration: "Software and Systems Development",
+      search: false,
       updating: false,
       updateLoading: ""
     }
@@ -38,9 +39,8 @@ export default class DegreeRequirements extends Component {
                 Degree Requirements
               </h1>
             </div>
-          </section>
-        <section className="section">
-          <div className="columns">
+          <div className="is-divider"/>
+            <div className="columns">
               <div className="column">
                 <div className="container is-fluid">
                   <div className="field is-horizontal">
@@ -48,7 +48,7 @@ export default class DegreeRequirements extends Component {
                       <label className="label is-medium">Degree</label>
                     </div>
                     <div className="field-body">
-                    <div className="control">
+                      <div className="control">
                         <div className="select is-medium is-info is-rounded">
                           <select value={this.state.degree} onChange={this.degreeChanged}>
                             <option value="Computer Science">Computer Science</option>
@@ -90,6 +90,16 @@ export default class DegreeRequirements extends Component {
                       </div>
                     </div>
                   </div>
+                  <div className="field is-horizontal">
+                      <div className="field-label">
+                        <label className="label is-medium"></label>
+                      </div>
+                      <div className="field-body">
+                        <div className="control">
+                        <button className={"button is-link is-rounded " + this.state.search}>Search</button>
+                        </div>
+                      </div>
+                    </div>
                 </div>
               </div>
           </div>
