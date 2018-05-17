@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import { Redirect } from 'react-router';
+import Popup from 'reactjs-popup';
+import Modal from 'react-responsive-modal';
+import './DegreeRequirement.css';
+
+
 
 export default class DegreeRequirements extends Component {
   constructor() {
@@ -11,7 +16,8 @@ export default class DegreeRequirements extends Component {
       concentration: "Software and Systems Development",
       search: false,
       updating: false,
-      updateLoading: ""
+      updateLoading: "",
+      open: false
     }
   }
   static contextTypes = {
@@ -26,9 +32,18 @@ export default class DegreeRequirements extends Component {
     this.setState({concentration: e.target.value});
   }
 
+  onOpenModal = () => {
+    this.setState({ open: true });
+  };
+
+  onCloseModal = () => {
+    this.setState({ open: false });
+  };
+
 
 
   render(){
+    const { open } = this.state;
     if (this.context.store.getState().user){
       return(
         <div>
@@ -96,7 +111,95 @@ export default class DegreeRequirements extends Component {
                       </div>
                       <div className="field-body">
                         <div className="control">
-                        <button className={"button is-link is-rounded " + this.state.search}>Search</button>
+                          <button className="button is-link is-rounded" onClick={this.onOpenModal}> Search </button>
+                          <Modal open={open} onClose={this.onCloseModal} classNames={{modal: 'custom-modal' }}>
+                            <h2>Course List</h2>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 1 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 2 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 3</button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 4 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 5 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 6 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 7 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 8 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 9 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 10 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 11 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 12 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 13 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                            <Popup trigger={<button className="button is-link is-rounded"> Class 14 </button>}
+                            modal
+                            closeOnDocumentClick>
+                            <span>Class Info</span>
+                            </Popup>
+                            <hr/>
+                          </Modal>
                         </div>
                       </div>
                     </div>
