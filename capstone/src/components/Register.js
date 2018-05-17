@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { createUser } from '../helpers/auth'
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import { auth, db } from '../config/firebase';
@@ -9,11 +8,26 @@ import { loginUser } from '../actions';
 
 
 export default class Register extends Component {
-  state = { registerError: null }
+  state = {
+    registerError: null,
+    emailClass: "is-info",
+    passwordClass: "is-info",
+    nameClass: "is-info",
+    registerLoading: ""
+  }
   handleSubmit = (e) => {
     e.preventDefault()
+    if (this.name.value.length === 0) {
+      const error = {message: "Please enter a Name."}
+      this.setState(this.handleErrorMsg(error))
+      return
+    }
+    this.setState({registerLoading: "is-loading"})
     createUser(this.email.value, this.password.value)
-      .catch((error) => this.setState(this.setErrorMsg(error)))
+      .catch((error) => {
+        this.setState({registerLoading: ""})
+        this.setState(this.handleErrorMsg(error))
+      })
   }
 
   static contextTypes = {
@@ -23,9 +37,43 @@ export default class Register extends Component {
     })
   }
 
-  setErrorMsg(error) {
-    return {
-      registerError: error.message
+  handleErrorMsg(error) {
+    switch(error.message) {
+      case "The email address is badly formatted.":
+        return {
+          emailClass: "is-danger",
+          passwordClass: "is-info",
+          nameClass: "is-info",
+          registerError: error.message
+        }
+      case "The email address is already in use by another account.":
+        return {
+          emailClass: "is-danger",
+          passwordClass: "is-info",
+          nameClass: "is-info",
+          registerError: error.message
+        }
+      case "Password should be at least 6 characters":
+        return {
+          passwordClass: "is-danger",
+          emailClass: "is-info",
+          nameClass: "is-info",
+          registerError: error.message
+        }
+      case "Please enter a Name.":
+        return {
+          nameClass: "is-danger",
+          emailClass: "is-info",
+          passwordClass: "is-info",
+          registerError: error.message
+        }
+      default:
+        return {
+          passwordClass: "is-info",
+          emailClass: "is-info",
+          nameClass: "is-info",
+          registerError: error.message
+        }
     }
   }
 
@@ -70,7 +118,7 @@ export default class Register extends Component {
   render () {
     return (
       <div>
-      <Navbar store={this.context.store}/>
+      <Navbar store={this.context.store} active="Register"/>
       <div>
         <section className="hero">
           <div className="hero-body">
@@ -88,28 +136,46 @@ export default class Register extends Component {
             <form onSubmit={this.handleSubmit}>
               <div className="field">
                 <label className="label">Name</label>
-                <div className="control">
-                  <input ref={(name) => this.name = name} className="input is-info is-rounded" type="text" placeholder="Name" />
+                <div className="control has-icons-right">
+                  <input ref={(name) => this.name = name} className={"input is-rounded " + this.state.nameClass} type="text" placeholder="Name" />
+                  {
+                    this.state.nameClass === "is-danger" &&
+                    <span className="icon is-medium is-right">
+                      <i className="fa fa-exclamation-triangle"></i>
+                    </span>
+                  }
                 </div>
               </div>
 
               <div className="field">
                 <label className="label">Email</label>
-                <div className="control has-icons-left">
-                  <input ref={(email) => this.email = email} className="input is-info is-rounded" type="email" placeholder="Email" />
+                <div className="control has-icons-left has-icons-right">
+                  <input ref={(email) => this.email = email} className={"input is-rounded " + this.state.emailClass} type="email" placeholder="Email" />
                   <span className="icon is-small is-left">
                     <i className="fa fa-envelope"></i>
                   </span>
+                  {
+                    this.state.emailClass === "is-danger" &&
+                    <span className="icon is-medium is-right">
+                      <i className="fa fa-exclamation-triangle"></i>
+                    </span>
+                  }
                 </div>
               </div>
 
               <div className="field">
               <label className="label">Password</label>
                 <p className="control has-icons-left has-icons-right">
-                  <input ref={(pass) => this.password = pass}className="input is-info is-rounded" type="password" placeholder="Password" />
+                  <input ref={(pass) => this.password = pass} className={"input is-rounded " + this.state.passwordClass} type="password" placeholder="Password" />
                   <span className="icon is-small is-left">
                     <i className="fa fa-lock"></i>
                   </span>
+                  {
+                    this.state.passwordClass === "is-danger" &&
+                    <span className="icon is-medium is-right">
+                      <i className="fa fa-exclamation-triangle"></i>
+                    </span>
+                  }
                 </p>
               </div>
 
@@ -117,14 +183,8 @@ export default class Register extends Component {
                 this.state.registerError &&
                 <p className="help is-danger">Error: {this.state.registerError}</p>
               }
-
-              <div className="field is-grouped">
-                <div className="control">
-                  <button type="submit" className="button is-link is-rounded">Register</button>
-                </div>
-                <div className="control">
-                  <Link to="/login"><button className="button is-text">Sign In</button></Link>
-                </div>
+              <div className="control">
+                <button type="submit" className={"button is-link is-rounded " + this.state.registerLoading}>Register</button>
               </div>
             </form>
           </div>

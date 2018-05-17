@@ -1,6 +1,7 @@
 // Import the Firebase modules that you need in your app.
 import firebase from 'firebase';
 require("firebase/firestore");
+require("firebase/functions");
 
 // Initalize and export Firebase.
 const config = {
@@ -17,4 +18,5 @@ firebase.initializeApp(config);
 export const provider = new firebase.auth.GoogleAuthProvider();
 export const auth = firebase.auth();
 export const db = firebase.firestore();
+export const functions = firebase.functions();
 export default firebase;

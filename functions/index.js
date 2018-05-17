@@ -322,6 +322,3 @@ exports.getTheoryCourses = functions.https.onRequest((request, response) => {
 
 });
 
-
-
-
