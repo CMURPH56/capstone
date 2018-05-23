@@ -1,11 +1,7 @@
 const firebase = require("firebase");
 require("firebase/firestore");
 
-firebase.initializeApp({
-  apiKey: 'AIzaSyCJjl3-_mNXXYS0MWm9fDAvaIDhT3c2dgs',
-  authDomain: 'csc394-capstone.firebaseapp.com',
-  projectId: 'csc394-capstone'
-});
+
 
 
 const data = require("./coursesFinal.json");
