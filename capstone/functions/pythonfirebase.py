@@ -43,30 +43,30 @@ def fillPreReqs():
 def getCourseAvailability(CourseID, ClassID):
 	Concentration_Courses = Courses.child(CourseID)
 	Specific_Class = Concentration_Courses.child(ClassID).get()
-	courseOfferings = [ "Fall 2018-2019", "Spring 2017-2018", "Winter 2017-2018", "Summer II 2016-2017","Spring 2016-2017"]
+
+	offerings = { "Fall": False, "Winter": False, "Spring": False }	
 	try:	
 		myList = Specific_Class['Years']
 		for date in myList:
-			for offering in pastOfferings: 
-				if date == offering:
-
-					return true
-
-				else:
-
-					return false
+			print(date)
+			if date ==  "Fall 2017-2018" or date == "Fall 2016-2017":
+				offerings["Fall"] = True
+			if date == "Spring 2017-2018" or date == "Spring 2016-2017":
+				offerings["Spring"] = True
+			if date == "Winter 2017-2018" or date == "Winter 2017-2018":
+				offerings["Winter"] = True
 	except KeyError:
 		print("This course is not offered") 
-		return false
 
 
-
+	
+	print(offerings)
 
 if __name__ == '__main__':
-	#getConcentrationCourses('1')
-	#print("___________ This is the individual Course __________________________")
+	getConcentrationCourses('1')
+	print("___________ This is the individual Course __________________________")
 	#getSpecificCourse('1', 'CSC 457')
 	#getCourseAttribute('1', 'CSC 457', 'Years')
-	getCourseAvailability('1', 'CSC 458')		
+	#getCourseAvailability('1', 'CSC 458')		
 
 
