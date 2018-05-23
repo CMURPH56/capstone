@@ -18,14 +18,10 @@
     "react-responsive-modal": "^3.0.1",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
-<<<<<<< HEAD
     "react-scrollbar": "^0.5.4",
     "reactjs-popup": "^1.1.1",
-    "redux": "^4.0.0"
-=======
     "redux": "^4.0.0",
     "underscore": "^1.9.0"
->>>>>>> 93733321ac0357dcdece419c738d4487f72bed65
   },
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
