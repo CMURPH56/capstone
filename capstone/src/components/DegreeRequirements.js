@@ -5,6 +5,7 @@ import { Redirect } from 'react-router';
 import Popup from 'reactjs-popup';
 import Modal from 'react-responsive-modal';
 import './DegreeRequirement.css';
+import { getDegreeRequirements } from '../config/api';
 
 
 
@@ -16,7 +17,7 @@ export default class DegreeRequirements extends Component {
       concentration: "Software and Systems Development",
       search: false,
       updating: false,
-      updateLoading: "",
+      modalLoading: "",
       open: false,
       reqCourses: {},
       concentrationCourses: {}
@@ -50,20 +51,18 @@ export default class DegreeRequirements extends Component {
   }
 
   onOpenModal = () => {
-    fetch('http://0.0.0.0:5000/v1/degree/Courses/0')
-      .then(response => response.json())
-      .then(data => {
-        this.setState({reqCourses: data['data']})
-      })
+    this.setState({modalLoading: "is-loading"})
+    getDegreeRequirements(0)
+    .then(courses => this.setState({reqCourses: courses}))
     
     const concentration = this.COURSES[this.state.concentration]
-    fetch(`http://0.0.0.0:5000/v1/degree/Courses/${concentration}`)
-      .then(response => response.json())
-      .then(data => {
-        this.setState({concentrationCourses: data['data']})
-      })
+    getDegreeRequirements(concentration)
+    .then(courses => this.setState({concentrationCourses: courses}))
 
-    this.setState({ open: true });
+    setTimeout(() => {
+      this.setState({ open: true });
+      this.setState({modalLoading: ""})
+      }, 400)
   };
 
   onCloseModal = () => {
@@ -179,7 +178,7 @@ export default class DegreeRequirements extends Component {
                       </div>
                       <div className="field-body">
                         <div className="control">
-                          <button className="button is-link is-rounded" onClick={this.onOpenModal}> Search </button>
+                          <button className={"button is-link is-rounded "+ this.state.modalLoading} onClick={this.onOpenModal}> Search </button>
                           <Modal open={open} onClose={this.onCloseModal} classNames={{modal: 'custom-modal' }}>
                             <div style={{float: "left"}}>
                               <h2 style={{textAlign: "center"}}>Required Courses</h2>
