@@ -1,4 +1,4 @@
-const API_URL = "http://35.237.16.74/v1/degree"
+const API_URL = "https://csc394-capstone.tk/v1/degree"
 
 
 export function getDegreeRequirements(concentration_id) {
