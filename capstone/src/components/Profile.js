@@ -3,7 +3,6 @@ import { db } from '../config/firebase';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 import Navbar from './Navbar';
-import firebase from '../config/firebase'
 
 export default class Profile extends Component {
   constructor() {
@@ -22,42 +21,38 @@ export default class Profile extends Component {
     store: PropTypes.object.isRequired
   }
 
-
   componentDidMount() {
     if (this.context.store.getState().user) {
-      this.handleGetProfile();
+      this.getProfile();
     }
   }
 
-  handleGetProfile = () => {
-    var getProfile = firebase.functions().httpsCallable('getProfile')
-    getProfile({}).then((result) => {
-      console.log(result)
-      const userData = result.data;
-      console.log(userData)
-      if (userData) {
-          console.log("Getting user profile!");
-          // Only update state if they already have previously stored data
-          if (userData['name'] && userData['degree']){
-            this.setState({
-              name: userData['name'],
-              degree: userData['degree'],
-              concentration: userData['concentration'],
-              numCourses: userData['numCourses']
-            });
-          }
-          else {
-            this.setState({
-              name: userData['name']
-            })
-          }
-          console.log(this.state)
-      } else {
-          console.log("User doesn't exist!")
-      }
-    }).catch((error) => {
-      console.log("Error getting document:", error);
-     });
+  getProfile = () => {
+    var docRef = db.collection("users").doc(this.context.store.getState().user.uid);
+    docRef.get().then((doc) => {
+    if (doc.exists) {
+        console.log("Getting user profile!");
+        // Only update state if they already have previously stored data
+        if (doc.data()['name'] && doc.data()['degree']){
+          this.setState({
+            name: doc.data()['name'],
+            degree: doc.data()['degree'],
+            concentration: doc.data()['concentration'],
+            numCourses: doc.data()['numCourses']
+          });
+        }
+        else {
+          this.setState({
+            name: doc.data()['name']
+          })
+        }
+        console.log(this.state)
+    } else {
+        console.log("User doesn't exist!")
+    }
+  }).catch((error) => {
+    console.log("Error getting document:", error);
+   });
   }
 
   degreeChanged = (e) => {
