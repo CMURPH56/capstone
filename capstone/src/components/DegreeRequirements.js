@@ -17,7 +17,24 @@ export default class DegreeRequirements extends Component {
       search: false,
       updating: false,
       updateLoading: "",
-      open: false
+      open: false,
+      reqCourses: {},
+      concentrationCourses: {}
+    }
+    this.COURSES = {
+      "Artificial Intelligence": 1,
+      "Business Analysis/Systems Analysis": 2,
+      "Business Intelligence": 3,
+      "Database Administration": 4,
+      "Database Systems": 5,
+      "Data Science": 6,
+      "Game and Real-Time Systems": 7,
+      "Human-Computer Interaction": 8,
+      "IT Enterprise Management": 9,
+      "Software and Systems Development": 10,
+      "Software Engineering": 11,
+      "Standard": 12,
+      "Theory": 13
     }
   }
   static contextTypes = {
@@ -33,6 +50,19 @@ export default class DegreeRequirements extends Component {
   }
 
   onOpenModal = () => {
+    fetch('http://0.0.0.0:5000/v1/degree/Courses/0')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({reqCourses: data['data']})
+      })
+    
+    const concentration = this.COURSES[this.state.concentration]
+    fetch(`http://0.0.0.0:5000/v1/degree/Courses/${concentration}`)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({concentrationCourses: data['data']})
+      })
+
     this.setState({ open: true });
   };
 
@@ -44,6 +74,44 @@ export default class DegreeRequirements extends Component {
 
   render(){
     const { open } = this.state;
+    const reqClassList = Object.entries(this.state.reqCourses).map((obj, idx) => {
+      var clear = "none"
+      if (idx === Object.keys(this.state.reqCourses).length - 1){
+         clear = "right"
+      }
+      return (
+        <div key={idx} style={{float: "left", padding: "25px", clear: clear}}>
+          <Popup trigger={<button className="button is-link is-rounded"> {obj[0]} </button>}
+          modal
+          closeOnDocumentClick>
+          <div>
+            <h1>{obj[0]}</h1>
+            <h1>{obj[1].CourseName}</h1>
+            <hr/>
+            <p>{obj[1].Description}</p>
+            <p>{obj[1].Prereq}</p>
+          </div>
+          </Popup>
+        </div>
+      )
+    });
+    const concentrationClassList = Object.entries(this.state.concentrationCourses).map((obj, idx) => {
+      return (
+        <div key={idx} style={{float: "left", padding: "25px"}}>
+          <Popup trigger={<button className="button is-link is-rounded"> {obj[0]} </button>}
+          modal
+          closeOnDocumentClick>
+          <div>
+            <h1>{obj[0]}</h1>
+            <h1>{obj[1].CourseName}</h1>
+            <hr/>
+            <p>{obj[1].Description}</p>
+            <p>{obj[1].Prereq}</p>
+          </div>
+          </Popup>
+        </div>
+      )
+    });
     if (this.context.store.getState().user){
       return(
         <div>
@@ -113,92 +181,16 @@ export default class DegreeRequirements extends Component {
                         <div className="control">
                           <button className="button is-link is-rounded" onClick={this.onOpenModal}> Search </button>
                           <Modal open={open} onClose={this.onCloseModal} classNames={{modal: 'custom-modal' }}>
-                            <h2>Course List</h2>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 1 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 2 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 3</button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 4 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 5 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 6 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 7 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 8 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 9 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 10 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 11 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 12 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 13 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
-                            <Popup trigger={<button className="button is-link is-rounded"> Class 14 </button>}
-                            modal
-                            closeOnDocumentClick>
-                            <span>Class Info</span>
-                            </Popup>
-                            <hr/>
+                            <div style={{float: "left"}}>
+                              <h2 style={{textAlign: "center"}}>Required Courses</h2>
+                              <hr/>
+                              {reqClassList}
+                            </div>
+                            <div style={{float: "left"}}>
+                              <h2 style={{textAlign: "center"}}>Concentration Courses</h2>
+                              <hr/>
+                              {concentrationClassList}
+                            </div>
                           </Modal>
                         </div>
                       </div>
