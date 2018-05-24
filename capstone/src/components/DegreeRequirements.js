@@ -62,7 +62,7 @@ export default class DegreeRequirements extends Component {
     setTimeout(() => {
       this.setState({ open: true });
       this.setState({modalLoading: ""})
-      }, 400)
+      }, 700)
   };
 
   onCloseModal = () => {
