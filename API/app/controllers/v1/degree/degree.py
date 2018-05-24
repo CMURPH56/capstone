@@ -1,12 +1,15 @@
 from flask import Blueprint
 from flask import jsonify
-from firebase_admin import db
+from firebase_admin import db, credentials
 import firebase_admin
-
+import os
 from app.utils import prepare_json_response
 
 
-firebase_admin.initialize_app(options={'databaseURL': 'https://csc394-capstone.firebaseio.com'})
+path = os.path.join(os.getcwd(), 'app/controllers/v1/degree/csc394-creds.json')
+
+cred = credentials.Certificate(path)
+firebase_admin.initialize_app(cred, options={'databaseURL': 'https://csc394-capstone.firebaseio.com'})
 
 
 mod = Blueprint("v1_degree", __name__, url_prefix="/v1/degree")
