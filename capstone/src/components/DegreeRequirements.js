@@ -57,13 +57,13 @@ export default class DegreeRequirements extends Component {
     
     const concentration = this.COURSES[this.state.concentration]
     getDegreeRequirements(concentration)
-    .then(courses => this.setState({concentrationCourses: courses}))
-
-    setTimeout(() => {
-      this.setState({ open: true });
-      this.setState({modalLoading: ""})
-      }, 700)
-  };
+    .then(courses => 
+      this.setState({
+        concentrationCourses: courses,
+        modalLoading: "",
+        open: true
+    }))
+  }
 
   onCloseModal = () => {
     this.setState({ open: false });
