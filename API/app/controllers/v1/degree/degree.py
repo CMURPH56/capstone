@@ -30,6 +30,25 @@ def get_concentration_courses(CourseID):
     )
 
 
+@mod.route('/Courses/Search/<query>', methods=['GET'])
+def search_courses(query):
+    query = query.strip()
+    data = {}
+    for idx, category in enumerate(courses.get()):
+        for course in category.keys():
+            if query in course and data.get(course) is None:
+                course_data = courses.child(str(idx)).child(course).get()
+                data[course] = course_data
+
+    return jsonify(
+        prepare_json_response(
+            message="OK",
+            success=True,
+            data=data
+        )
+    )
+
+
 @mod.route('/Courses/<CourseID>/<ClassID>', methods=['GET'])
 def get_specific_course(CourseID, ClassID):
     Concentration_Courses = courses.child(CourseID)
