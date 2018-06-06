@@ -2,45 +2,103 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import { Redirect } from 'react-router';
+import { getPath } from '../config/api';
+import Modal from 'react-responsive-modal';
+import Popup from 'reactjs-popup';
 
 export default class DegreePlanner extends Component {
   constructor() {
     super();
     this.state = {
-      startingQ: "",
-      degree: "",
-      courseType: "",
-      numClasses: "",
-      concentration: "",
-      search: false
+      degree: "Computer Science",
+      concentration: "Software and Systems Development",
+      numCourses: "1",
+      modalLoading: "",
+      path: {},
+      open: false
+    }
+    this.COURSES = {
+      "Artificial Intelligence": 1,
+      "Business Analysis/Systems Analysis": 2,
+      "Business Intelligence": 3,
+      "Database Administration": 4,
+      "Database Systems": 5,
+      "Data Science": 6,
+      "Game and Real-Time Systems": 7,
+      "Human-Computer Interaction": 8,
+      "IT Enterprise Management": 9,
+      "Software and Systems Development": 10,
+      "Software Engineering": 11,
+      "Standard": 12,
+      "Theory": 13
     }
   }
   static contextTypes = {
     store: PropTypes.object.isRequired
   }
 
-  startingQChanged = (e) => {
-    this.setState({startingQ: e.target.value});
-  }
-
   degreeChanged = (e) => {
     this.setState({degree: e.target.value});
   }
 
-  courseTypeChanged = (e) => {
-    this.setState({courseType: e.target.value});
-  }
-
-  numClassesChanged = (e) => {
-    this.setState({numClasses: e.target.value});
+  numCoursesChanged = (e) => {
+    this.setState({numCourses: e.target.value})
   }
 
   concentrationChanged = (e) => {
     this.setState({concentration: e.target.value});
   }
 
+  onOpenModal = () => {
+    this.setState({modalLoading: "is-loading"})
+    
+    const concentration = this.COURSES[this.state.concentration]
+    getPath(concentration, this.state.numCourses)
+    .then(courses => {
+      this.setState({
+        path: courses,
+        modalLoading: "",
+        open: true
+      })
+    })
+  }
+
+  onCloseModal = () => {
+    this.setState({ open: false });
+  };
+
 
   render(){
+    const { path } = this.state
+    const pathList = Array.prototype.map.call(path, (obj, i) => {
+      return(
+        <div key={i} style={{float: "left", clear: "right", width: "100%"}}>
+          <h2 style={{clear: "right", textAlign: "center"}}>Quarter {i+1}</h2>
+          <hr/>
+          {Array.prototype.map.call(path[i], (object, idx) => {
+            return(
+              Object.entries(object).map((course, cidx) => {
+                return(
+                  <div key={cidx} style={{float: "left", padding: "25px"}}>
+                    <Popup trigger={<button className="button is-link is-rounded"> {course[0]} </button>}
+                      modal
+                      closeOnDocumentClick>
+                      <div>
+                        <h1>{course[0]}</h1>
+                        <h1>{course[1].CourseName}</h1>
+                        <hr/>
+                        <p>{course[1].Description}</p>
+                        <p>{course[1].Prereq}</p>
+                      </div>
+                    </Popup>
+                  </div>
+                )
+              })
+            )
+          })}
+        </div>
+      )
+    })
     if (this.context.store.getState().user){
       return(
         <div>
@@ -55,16 +113,6 @@ export default class DegreePlanner extends Component {
             <div className="columns">
               <div className="column">
                 <div className="container is-fluid">
-                <div className="field is-horizontal">
-                    <div className="field-label">
-                      <label className="label is-medium">Starting Quarter</label>
-                    </div>
-                    <div className="field-body">
-                      <div className="control">
-                      <input className="input is-medium is-link is-rounded" type="text" value={this.state.startingQ} onChange={this.startingQChanged}/>
-                      </div>
-                    </div>
-                  </div>
                   <div className="field is-horizontal">
                     <div className="field-label">
                       <label className="label is-medium">Degree</label>
@@ -129,28 +177,18 @@ export default class DegreePlanner extends Component {
                         </div>
                      </div>
                   </div>
-                  <div className="field is-horizontal">
-                      <div className="field-label">
-                        <label className="label is-medium">Course Type</label>
-                      </div>
-                      <div className="field-body">
-                        <div className="control">
-                          <div className="select is-medium is-link is-rounded">
-                            <select value={this.state.courseType} onChange={this.courseTypeChanged}>
-                              <option value="Computer Science">Computer Science</option>
-                              <option value="Information Systems">Information Systems</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <div className="field is-horizontal">
                       <div className="field-label">
                         <label className="label is-medium"></label>
                       </div>
                       <div className="field-body">
                         <div className="control">
-                          <button className={"button is-link is-rounded " + this.state.search}>Search</button>
+                          <button className={"button is-link is-rounded " + this.state.modalLoading} onClick={this.onOpenModal}>Search</button>
+                          <Modal open={this.state.open} onClose={this.onCloseModal} classNames={{modal: 'custom-modal' }}>
+                            <div style={{float: "left"}}>
+                              {pathList}
+                            </div>
+                          </Modal>
                         </div>
                       </div>
                     </div>

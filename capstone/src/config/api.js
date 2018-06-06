@@ -1,5 +1,4 @@
-//const API_URL = "https://csc394-capstone.tk/v1/degree"
-const API_URL = "http://0.0.0.0:5000/v1/degree"
+const API_URL = "https://csc394-capstone.tk/v1/degree"
 
 export function getDegreeRequirements(concentration_id) {
     return fetch(`${API_URL}/Courses/${concentration_id}`)
@@ -19,5 +18,13 @@ export function searchCourses(query) {
         else {
             return {}
         }
+    })
+}
+
+export function getPath(concentration_id, num_courses) {
+    return fetch(`${API_URL}/FastestPath/Courses/${concentration_id}/${num_courses}`)
+      .then(response => response.json())
+      .then(data => {
+        return data['data']
     })
 }

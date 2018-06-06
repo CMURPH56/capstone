@@ -52,8 +52,13 @@ export default class DegreeRequirements extends Component {
 
   onOpenModal = () => {
     this.setState({modalLoading: "is-loading"})
-    getDegreeRequirements(0)
-    .then(courses => this.setState({reqCourses: courses}))
+    if (this.state.degree === "Computer Science") {
+      getDegreeRequirements(0)
+      .then(courses => this.setState({reqCourses: courses}))
+    }
+    else {
+      this.setState({reqCourses: {}})
+    }
     
     const concentration = this.COURSES[this.state.concentration]
     getDegreeRequirements(concentration)
@@ -180,11 +185,14 @@ export default class DegreeRequirements extends Component {
                         <div className="control">
                           <button className={"button is-link is-rounded "+ this.state.modalLoading} onClick={this.onOpenModal}> Search </button>
                           <Modal open={open} onClose={this.onCloseModal} classNames={{modal: 'custom-modal' }}>
-                            <div style={{float: "left"}}>
-                              <h2 style={{textAlign: "center"}}>Required Courses</h2>
-                              <hr/>
-                              {reqClassList}
+                            {
+                              this.state.degree === "Computer Science" &&
+                              <div style={{float: "left"}}>
+                                <h2 style={{textAlign: "center"}}>Required Courses</h2>
+                                <hr/>
+                                {reqClassList}
                             </div>
+                            }
                             <div style={{float: "left"}}>
                               <h2 style={{textAlign: "center"}}>Concentration Courses</h2>
                               <hr/>
